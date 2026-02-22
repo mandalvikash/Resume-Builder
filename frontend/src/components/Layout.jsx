@@ -1,29 +1,84 @@
-import { Outlet, Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 export default function Layout() {
   const { user, token, logout } = useAuth();
+  const navigate = useNavigate();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    setProfileOpen(false);
+    logout();
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-slate-900 text-white shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="font-display font-bold text-xl tracking-tight">
+    <div className="min-h-screen flex flex-col dark:bg-slate-900 transition-colors">
+      <header className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border-b border-slate-200 dark:border-slate-700">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link to="/" className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">
             GenC Dossier
           </Link>
-          <nav className="flex items-center gap-6">
-            <Link to="/" className="hover:text-primary-300 transition">Home</Link>
+          <nav className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link to="/app" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+              Home
+            </Link>
             {token ? (
               <>
-                <Link to="/build" className="hover:text-primary-300 transition">Build Dossier</Link>
-                <span className="text-slate-400 text-sm">{user?.name}</span>
-                <button type="button" onClick={logout} className="hover:text-primary-300 transition text-sm">
-                  Log out
-                </button>
+                <Link to="/build" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+                  Build Dossier
+                </Link>
+                <div className="relative" ref={profileRef}>
+                  <button
+                    type="button"
+                    onClick={() => setProfileOpen((o) => !o)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  >
+                    <span className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold">
+                      {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+                    </span>
+                    Profile
+                  </button>
+                  {profileOpen && (
+                    <div className="absolute right-0 top-full mt-1 w-52 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg py-2 z-50">
+                      <Link
+                        to="/app/profile"
+                        onClick={() => setProfileOpen(false)}
+                        className="block px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-medium"
+                      >
+                        Log out
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <>
-                <Link to="/login" className="hover:text-primary-300 transition">Log in</Link>
-                <Link to="/signup" className="hover:text-primary-300 transition">Sign up</Link>
+                <Link to="/login" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+                  Log in
+                </Link>
+                <Link to="/signup" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+                  Sign up
+                </Link>
               </>
             )}
           </nav>
@@ -32,7 +87,7 @@ export default function Layout() {
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="bg-slate-800 text-slate-300 py-6 text-center text-sm">
+      <footer className="bg-slate-800 dark:bg-slate-950 dark:border-t dark:border-slate-800 text-slate-300 py-6 text-center text-sm">
         GenC Dossier Generator — Create & share your portfolio
       </footer>
     </div>

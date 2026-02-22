@@ -23,6 +23,17 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
+/** Get latest dossier (full document) in one request - avoids list + get by id */
+router.get('/latest', authMiddleware, async (req, res) => {
+  try {
+    const dossier = await Dossier.findOne({ userId: req.user._id }).sort({ updatedAt: -1 }).lean();
+    if (!dossier) return res.status(404).json({ error: 'No dossier found' });
+    res.json(dossier);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/share/:shareId', async (req, res) => {
   try {
     const dossier = await Dossier.findOne({ shareId: req.params.shareId }).lean();

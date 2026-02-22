@@ -25,11 +25,11 @@ export default function StepAchievements({ data, update }) {
   return (
     <section className="space-y-8">
       <div>
-        <h2 className="font-display text-lg font-semibold text-slate-900 mb-4">Achievements & recognitions</h2>
+        <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white mb-4">Achievements & recognitions</h2>
         {achievements.map((a, i) => (
-          <div key={i} className="p-4 rounded-xl border border-slate-200 bg-white mb-3 space-y-2">
+          <div key={i} className="p-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 mb-3 space-y-2">
             <div className="flex justify-end">
-              <button type="button" onClick={() => removeAchievement(i)} className="text-red-600 text-sm hover:underline">
+              <button type="button" onClick={() => removeAchievement(i)} className="text-red-600 dark:text-red-400 text-sm hover:underline">
                 Remove
               </button>
             </div>
@@ -38,39 +38,39 @@ export default function StepAchievements({ data, update }) {
               placeholder="Title / Award"
               value={a.title || ''}
               onChange={(e) => changeAchievement(i, 'title', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
             <input
               type="text"
               placeholder="Description"
               value={a.description || ''}
               onChange={(e) => changeAchievement(i, 'description', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
             <input
               type="text"
               placeholder="Date"
               value={a.date || ''}
               onChange={(e) => changeAchievement(i, 'date', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
           </div>
         ))}
         <button
           type="button"
           onClick={addAchievement}
-          className="px-4 py-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-600 hover:border-primary-500"
+          className="px-4 py-2 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-primary-500"
         >
           + Add achievement
         </button>
       </div>
 
       <div>
-        <h2 className="font-display text-lg font-semibold text-slate-900 mb-4">Volunteering</h2>
+        <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white mb-4">Volunteering</h2>
         {volunteering.map((v, i) => (
-          <div key={i} className="p-4 rounded-xl border border-slate-200 bg-white mb-3 space-y-2">
+          <div key={i} className="p-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 mb-3 space-y-2">
             <div className="flex justify-end">
-              <button type="button" onClick={() => removeVolunteering(i)} className="text-red-600 text-sm hover:underline">
+              <button type="button" onClick={() => removeVolunteering(i)} className="text-red-600 dark:text-red-400 text-sm hover:underline">
                 Remove
               </button>
             </div>
@@ -79,35 +79,35 @@ export default function StepAchievements({ data, update }) {
               placeholder="Organization"
               value={v.organization || ''}
               onChange={(e) => changeVolunteering(i, 'organization', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
             <input
               type="text"
               placeholder="Role"
               value={v.role || ''}
               onChange={(e) => changeVolunteering(i, 'role', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
             <input
               type="text"
               placeholder="Description"
               value={v.description || ''}
               onChange={(e) => changeVolunteering(i, 'description', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
             <input
               type="text"
               placeholder="Duration"
               value={v.duration || ''}
               onChange={(e) => changeVolunteering(i, 'duration', e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 px-3 py-2"
             />
           </div>
         ))}
         <button
           type="button"
           onClick={addVolunteering}
-          className="px-4 py-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-600 hover:border-primary-500"
+          className="px-4 py-2 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-primary-500"
         >
           + Add volunteering
         </button>

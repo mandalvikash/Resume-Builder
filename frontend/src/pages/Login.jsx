@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const data = await login(email.trim(), password);
       setToken(data.token, data.user);
-      navigate('/build', { replace: true });
+      navigate('/app', { replace: true });
     } catch (err) {
       setError(err.message || 'Login failed');
     } finally {

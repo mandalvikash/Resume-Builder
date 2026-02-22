@@ -23,7 +23,7 @@ export default function Signup() {
     try {
       const data = await signup(name.trim(), email.trim(), password);
       setToken(data.token, data.user);
-      navigate('/build', { replace: true });
+      navigate('/app', { replace: true });
     } catch (err) {
       setError(err.message || 'Signup failed');
     } finally {

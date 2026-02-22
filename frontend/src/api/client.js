@@ -45,6 +45,14 @@ export async function getDossier(id) {
   return res.json();
 }
 
+/** Single request for latest dossier (avoids getDossiers + getDossier). Returns null if 404. */
+export async function getLatestDossier() {
+  const res = await fetch(`${API}/dossiers/latest`, { headers: headers() });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
 export async function getDossierByShareId(shareId) {
   const res = await fetch(`${API}/dossiers/share/${shareId}`);
   if (!res.ok) throw new Error(await res.text());
