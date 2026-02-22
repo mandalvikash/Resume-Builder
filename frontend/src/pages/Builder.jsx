@@ -195,8 +195,10 @@ export default function Builder() {
           localStorage.setItem(storageKey, JSON.stringify(data));
         } catch (_) {}
       }
+      return true;
     } catch (e) {
       setError(e.message);
+      return false;
     } finally {
       setLoading(false);
     }
@@ -291,10 +293,14 @@ export default function Builder() {
               </button>
               <button
                 type="button"
-                onClick={() => setStep((s) => Math.min(s + 1, STEPS.length - 1))}
-                className="px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-medium hover:bg-primary-500 shadow-sm transition-colors"
+                onClick={async () => {
+                  const ok = await save();
+                  if (ok) setStep((s) => Math.min(s + 1, STEPS.length - 1));
+                }}
+                disabled={loading}
+                className="px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-medium hover:bg-primary-500 shadow-sm transition-colors disabled:opacity-50"
               >
-                Next
+                {loading ? 'Saving…' : 'Save & Next'}
               </button>
             </div>
           )}

@@ -41,6 +41,8 @@ const useCountUp = (end, duration, isVisible) => {
     }, 16);
     return () => clearInterval(timer);
   }, [end, duration, isVisible]);
+  return count;
+};
 
 const useHeaderScroll = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -49,11 +51,7 @@ const useHeaderScroll = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-  const headerScrolled = useHeaderScroll();
   return scrolled;
-};
-
-  return count;
 };
 
 export default function LandingPage() {
@@ -182,17 +180,6 @@ export default function LandingPage() {
             </a>
           </div>
         </div>
-        <a
-          href="#stats"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors group"
-        >
-          <span className="text-xs font-medium tracking-wider uppercase">Scroll</span>
-          <span className="animate-bounce">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </span>
-        </a>
       </section>
 
       {/* Stats Section */}
@@ -389,7 +376,7 @@ export default function LandingPage() {
           <nav className="flex gap-8">
             <Link to="/login" className="hover:text-white transition-colors">Sign In</Link>
             <Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link>
-            <Link to="/app" className="hover:text-white transition-colors">Home</Link>
+            <Link to="/" className="hover:text-white transition-colors">Home</Link>
           </nav>
         </div>
       </footer>

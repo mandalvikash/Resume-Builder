@@ -55,10 +55,19 @@ export default function Profile() {
       <div className="space-y-8">
         {/* Candidate profile card */}
         <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between gap-4">
             <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white">
               Candidate profile
             </h2>
+            <Link
+              to="/build"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Edit
+            </Link>
           </div>
           <div className="p-6">
             {dossier ? (
@@ -66,7 +75,11 @@ export default function Profile() {
                 <div className="shrink-0 flex justify-center sm:justify-start">
                   <div className="w-24 h-24 rounded-xl bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center">
                     <span className="text-2xl font-semibold text-slate-400 dark:text-slate-500">
-                      {(p.name || user?.name || '?').charAt(0).toUpperCase()}
+                      {(() => {
+                        const name = String(p.name || user?.name || user?.email || '?').trim();
+                        const initial = name.charAt(0).toUpperCase();
+                        return initial || '?';
+                      })()}
                     </span>
                   </div>
                 </div>

@@ -27,16 +27,16 @@ export default function Layout() {
     <div className="min-h-screen flex flex-col dark:bg-slate-900 transition-colors">
       <header className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">
+          <Link to={token ? '/app' : '/'} className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white">
             GenC Dossier
           </Link>
           <nav className="flex items-center gap-3">
             <ThemeToggle />
-            <Link to="/app" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
-              Home
-            </Link>
             {token ? (
               <>
+                <Link to="/app" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+                  Home
+                </Link>
                 <Link to="/build" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
                   Build Dossier
                 </Link>
@@ -45,11 +45,17 @@ export default function Layout() {
                     type="button"
                     onClick={() => setProfileOpen((o) => !o)}
                     className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                    aria-label="Account menu"
                   >
                     <span className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold">
-                      {(user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+                      {(() => {
+                        const name = (user?.name || '').trim();
+                        const words = name.split(/\s+/).filter(Boolean);
+                        const firstWord = words[0];
+                        if (firstWord) return firstWord.charAt(0).toUpperCase();
+                        return (user?.email || 'U').charAt(0).toUpperCase();
+                      })()}
                     </span>
-                    Profile
                   </button>
                   {profileOpen && (
                     <div className="absolute right-0 top-full mt-1 w-52 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg py-2 z-50">
@@ -73,6 +79,9 @@ export default function Layout() {
               </>
             ) : (
               <>
+                <Link to="/" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
+                  Home
+                </Link>
                 <Link to="/login" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition">
                   Log in
                 </Link>

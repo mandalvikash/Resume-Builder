@@ -134,6 +134,7 @@ export default function StepTemplates({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [hasClickedUpdate, setHasClickedUpdate] = useState(false);
 
   const outputType = data.outputType || 'both';
   const showPdf = outputType === 'pdf' || outputType === 'both';
@@ -234,7 +235,10 @@ export default function StepTemplates({
         <div className="flex flex-wrap items-center gap-4">
           <button
             type="button"
-            onClick={save}
+            onClick={() => {
+              if (savedId) setHasClickedUpdate(true);
+              save();
+            }}
             disabled={loading}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 disabled:opacity-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
@@ -281,7 +285,7 @@ export default function StepTemplates({
                   {pdfLoading ? 'Generating…' : 'Download PDF'}
                 </button>
               )}
-              {showWeb && shareId && (
+              {showWeb && shareId && hasClickedUpdate && (
                 <>
                   <Link
                     to={`/p/${shareId}`}
@@ -322,11 +326,6 @@ export default function StepTemplates({
                 </>
               )}
             </div>
-            {shareId && (
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Share: <code className="bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded text-xs">{getShareUrl(shareId)}</code>
-              </p>
-            )}
           </div>
         )}
       </div>

@@ -5,6 +5,25 @@ const AuthContext = createContext(null);
 const TOKEN_KEY = 'genc_dossier_token';
 const USER_KEY = 'genc_dossier_user';
 
+/** Decode JWT payload (no verify). Returns { exp } or null. */
+function getTokenExpiry(jwtToken) {
+  if (!jwtToken || typeof jwtToken !== 'string') return null;
+  try {
+    const parts = jwtToken.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return payload.exp ? payload.exp * 1000 : null; // exp in seconds -> ms
+  } catch {
+    return null;
+  }
+}
+
+function isTokenExpired(jwtToken) {
+  const expMs = getTokenExpiry(jwtToken);
+  if (expMs == null) return true; // no exp or invalid -> treat as expired
+  return Date.now() >= expMs;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
@@ -14,13 +33,30 @@ export function AuthProvider({ children }) {
       return null;
     }
   });
-  const [token, setTokenState] = useState(() => localStorage.getItem(TOKEN_KEY));
+  const [token, setTokenState] = useState(() => {
+    const stored = localStorage.getItem(TOKEN_KEY);
+    if (!stored) return null;
+    if (isTokenExpired(stored)) {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      return null;
+    }
+    return stored;
+  });
 
   useEffect(() => {
     if (!token) {
       setUser(null);
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
+    }
+  }, [token]);
+
+  // Keep session valid until JWT expires; clear only when token is actually expired
+  useEffect(() => {
+    if (!token) return;
+    if (isTokenExpired(token)) {
+      setTokenState(null);
     }
   }, [token]);
 
